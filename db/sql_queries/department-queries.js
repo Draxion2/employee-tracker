@@ -1,7 +1,7 @@
 const db = require("../../db/connection");
 const table = require("console.table");
 
-function department() {
+function Department(startQuestions) {
 
     // view departments
     this.view = () => {
@@ -12,6 +12,7 @@ function department() {
                 return;
             }
             console.table(rows);
+            startQuestions();
         });
     }
 
@@ -23,9 +24,10 @@ function department() {
                 console.log(err);
                 return;
             }
-            return console.log(`Added ${input} to database!`);
+            console.log(`Added ${input} to database!`);
+            startQuestions();
         });
     }
 };
 
-module.exports = department;
+module.exports = Department;
