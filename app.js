@@ -1,9 +1,13 @@
 const inquirer = require("inquirer");
-const cTable = require("console.table");
 const db = require("./db/connection");
+const department = require("./db/sql_queries/department-queries");
+const roles = require("./db/sql_queries/role-queries");
+
+// connect sql queries
+const sql_department = new department;
+const sql_roles = new roles;
 
 const startApp = () =>  {
-    console.log("===== EMPLOYEE TRACKER =====")
     return inquirer
     .prompt([
 
@@ -25,30 +29,59 @@ const startApp = () =>  {
     .then(choice => {
         switch(choice.firstOptions) {
             case "View all departments":
-                // function department_view() goes here
-                console.log(choice.firstOptions);
+                startQuestions();
+                sql_department.view();
                 break;
             case "View all roles":
-                // function role_view() goes here
-                console.log(choice.firstOptions);
+                sql_roles.view();
+                startQuestions();
                 break;
             case "Add a department":
-                // function department_add() goes here
-                console.log(choice.firstOptions);
+                departmentQuestions();
                 break;
             case "Add a role":
                 // function role_add() goes here
-                console.log(choice.firstOptions);
                 break;
             case "Add an employee":
                 // function employee_add() goes here
-                console.log(choice.firstOptions);
                 break;
             case "Update an employee role":
                 // function employee_update() goes here
-                console.log(choice.firstOptions);
                 break;
         };
+    });
+};
+
+function departmentQuestions() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "department_name",
+            message: "What is the department's new name?"
+        }
+    ])
+    .then(input => {
+        sql_department.add(input.department_name);
+        startQuestions();
+    });
+};
+
+// start questions again
+function startQuestions() {
+    inquirer.prompt([
+        {
+            type: "confirm",
+            name: "confirm_start",
+            message: "Would you like to continue?",
+            default: false
+        }
+    ])
+    .then(input => {
+        if (input.confirm_start) {
+            startApp();
+        } else {
+            db.end();
+        }
     });
 }
 
