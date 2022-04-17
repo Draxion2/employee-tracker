@@ -25,7 +25,8 @@ const startApp = () =>  {
                 "Add a department",
                 "Add a role",
                 "Add an employee",
-                "Update an employee role"
+                "Update an employee role",
+                "Update an employee's manager"
             ]
         }
     ])
@@ -50,8 +51,10 @@ const startApp = () =>  {
                 employeeQuestions();
                 break;
             case "Update an employee role":
-                sql_employee.update();
+                sql_employee.updateRole();
                 break;
+            case "Update an employee's manager":
+                sql_employee.updateManager();
         };
     });
 };

@@ -17,6 +17,11 @@ function Employee(startQuestions) {
         });
     }
 
+    // view employee by department
+    this.viewByDepartment = () => {
+        
+    }
+
     // add a new employee
     this.add = (first_name, last_name, role, manager) => {
         const sql =  `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
@@ -32,7 +37,7 @@ function Employee(startQuestions) {
     }
 
     // update an employee's role
-    this.update = () => {
+    this.updateRole = () => {
         const list = [];
         const sql = `SELECT employee.id, employee.first_name, employee.last_name FROM employee`;
         db.query(sql, (err, result) => {
@@ -67,7 +72,6 @@ function Employee(startQuestions) {
             ])
             .then(input => {
                 const id = list.indexOf(input.updatedRole) + 1;
-                console.log(id);
                 const sql = `UPDATE employee SET role_id = ${input.newRole} WHERE id = ${id}`;
                 db.query(sql, (err, result) => {
                     if (err) {
@@ -75,6 +79,55 @@ function Employee(startQuestions) {
                         return;
                     }
                     console.log(`Updated ${input.updatedRole}'s role`);
+                    startQuestions();
+                });
+            });
+        });
+    }
+
+    // update an employee's manager
+    this.updateManager = () => {
+        const list = [];
+        const sql = `SELECT employee.id, employee.first_name FROM employee`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            result.forEach(item => {
+                const employee_names = `${item.first_name}`;
+                list.push(employee_names);
+            });
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "updatedManager",
+                    message: "Which employee would you like to update?",
+                    choices: list
+                },
+                {
+                    type: "input",
+                    name: "newManager",
+                    message: "What is their new manager's id?",
+                    validate: managerInput => {
+                        if (isNaN(managerInput)) {
+                            console.log("Please input a valid number");
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            ])
+            .then(input => {
+                const id = list.indexOf(input.updatedManager) + 1;
+                const sql = `UPDATE employee SET manager_id = ${input.newManager} WHERE id = ${id}`;
+                db.query(sql, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    console.log(`Updated ${input.updatedManager}'s role`);
                     startQuestions();
                 });
             });
