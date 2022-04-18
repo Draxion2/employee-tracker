@@ -66,6 +66,19 @@ function Roles(startQuestions) {
             })
         });
     }
+
+    // delete all roles
+    this.deleteAll = () => {
+        const sql = `DELETE FROM roles`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(`Removed all roles!`);
+            startQuestions();
+        });
+    }
 };
 
 module.exports = Roles;

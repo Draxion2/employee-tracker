@@ -22,14 +22,17 @@ const startApp = () =>  {
                 "View all departments",
                 "View all roles",
                 "View all employees",
-                "Add a department",
-                "Add a role",
-                "Add an employee",
-                "Update an employee role",
+                "Add a new department",
+                "Add a new role",
+                "Add a new employee",
+                "Update an employee's role",
                 "Update an employee's manager",
                 "Delete an employee",
                 "Delete a role",
-                "Delete a department"
+                "Delete a department",
+                "Delete all employees",
+                "Delete all roles",
+                "Delete all departments"
             ]
         }
     ])
@@ -44,16 +47,16 @@ const startApp = () =>  {
             case "View all employees":
                 sql_employee.view();
                 break;
-            case "Add a department":
+            case "Add a new department":
                 departmentQuestions();
                 break;
-            case "Add a role":
+            case "Add a new role":
                 roleQuestions();
                 break;
-            case "Add an employee":
+            case "Add a new employee":
                 employeeQuestions();
                 break;
-            case "Update an employee role":
+            case "Update an employee's role":
                 sql_employee.updateRole();
                 break;
             case "Update an employee's manager":
@@ -68,9 +71,72 @@ const startApp = () =>  {
             case "Delete a department":
                 sql_department.delete();
                 break;
+            case "Delete all employees":
+                deleteAllRows("employees");
+                break;
+            case "Delete all roles":
+                deleteAllRows("roles");
+                break;
+            case "Delete all departments":
+                deleteAllRows();
+                break;
         };
     });
 };
+
+// validation for complete deletion
+function deleteAllRows(choice) {
+    if (choice === "employees") {
+        inquirer.prompt([
+            {
+                type: "confirm",
+                name: "deleteConfirm",
+                message: "Are you sure you want to delete all employees?",
+                default: false
+            }
+        ])
+        .then(input => {
+            if (input.deleteConfirm) {
+                sql_employee.deleteAll();
+            } else {
+                startQuestions();
+            }
+        });
+    }
+    else  if (choice === "roles") {
+        inquirer.prompt([
+            {
+                type: "confirm",
+                name: "deleteConfirm",
+                message: "Are you sure you want to delete all roles?",
+                default: false
+            }
+        ])
+        .then(input => {
+            if (input.deleteConfirm) {
+                sql_roles.deleteAll();
+            } else {
+                startQuestions();
+            }
+        });
+    } else {
+        inquirer.prompt([
+            {
+                type: "confirm",
+                name: "deleteConfirm",
+                message: "Are you sure you want to delete all departments?",
+                default: false
+            }
+        ])
+        .then(input => {
+            if (input.deleteConfirm) {
+                sql_department.deleteAll();
+            } else {
+                startQuestions();
+            }
+        });
+    }
+}
 
 // questions for adding a new department
 function departmentQuestions() {

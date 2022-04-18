@@ -164,6 +164,19 @@ function Employee(startQuestions) {
             })
         });
     }
+
+    // delete all employees
+    this.deleteAll = () => {
+        const sql = `DELETE FROM employee`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(`Removed all employees!`);
+            startQuestions();
+        });
+    }
 }
 
 module.exports = Employee;

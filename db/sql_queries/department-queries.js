@@ -65,6 +65,19 @@ function Department(startQuestions) {
             })
         });
     }
+
+    // delete all departments
+    this.deleteAll = () => {
+        const sql = `DELETE FROM department`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(`Removed all departments!`);
+            startQuestions();
+        });
+    }
 };
 
 module.exports = Department;
