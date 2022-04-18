@@ -17,11 +17,6 @@ function Employee(startQuestions) {
         });
     }
 
-    // view employee by department
-    this.viewByDepartment = () => {
-        
-    }
-
     // add a new employee
     this.add = (first_name, last_name, role, manager) => {
         const sql =  `INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
@@ -131,6 +126,42 @@ function Employee(startQuestions) {
                     startQuestions();
                 });
             });
+        });
+    }
+
+    // delete an employee
+    this.delete = () => {
+        const list = [];
+        const sql = `SELECT employee.id, employee.first_name FROM employee`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            result.forEach(item => {
+                const employee_names = `${item.first_name}`;
+                list.push(employee_names);
+            });
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "deletedEmployee",
+                    message: "Which employee would you like to remove?",
+                    choices: list
+                }
+            ])
+            .then(input => {
+                const sql = `DELETE FROM employee WHERE first_name = ?`;
+                const params = input.deletedEmployee;
+                db.query(sql, params, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    console.log(`Deleted ${input.deletedEmployee} from database!`);
+                    startQuestions();
+                })
+            })
         });
     }
 }

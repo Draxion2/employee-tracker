@@ -13,7 +13,7 @@ const startApp = () =>  {
     return inquirer
     .prompt([
 
-        // set up first questions
+        // set up questions
         {
             type: "list",
             name: "firstOptions",
@@ -26,7 +26,10 @@ const startApp = () =>  {
                 "Add a role",
                 "Add an employee",
                 "Update an employee role",
-                "Update an employee's manager"
+                "Update an employee's manager",
+                "Delete an employee",
+                "Delete a role",
+                "Delete a department"
             ]
         }
     ])
@@ -55,6 +58,16 @@ const startApp = () =>  {
                 break;
             case "Update an employee's manager":
                 sql_employee.updateManager();
+                break;
+            case "Delete an employee":
+                sql_employee.delete();
+                break;
+            case "Delete a role":
+                sql_roles.delete();
+                break;
+            case "Delete a department":
+                sql_department.delete();
+                break;
         };
     });
 };

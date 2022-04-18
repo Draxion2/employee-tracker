@@ -1,3 +1,4 @@
+const inquirer = require("inquirer");
 const db = require("../../db/connection");
 const table = require("console.table");
 
@@ -26,6 +27,42 @@ function Department(startQuestions) {
             }
             console.log(`Added ${input} to database!`);
             startQuestions();
+        });
+    }
+
+    // delete a department
+    this.delete = () => {
+        const list = [];
+        const sql = `SELECT department.id, department.department_name FROM department`;
+        db.query(sql, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            result.forEach(item => {
+                const departmentNames = `${item.department_name}`;
+                list.push(departmentNames);
+            });
+            inquirer.prompt([
+                {
+                    type: "list",
+                    name: "deletedDepartment",
+                    message: "Which department would you like to remove?",
+                    choices: list
+                }
+            ])
+            .then(input => {
+                const sql = `DELETE FROM department WHERE department_name = ?`;
+                const params = input.deletedDepartment;
+                db.query(sql, params, (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        return;
+                    }
+                    console.log(`Deleted ${input.deletedDepartment} from database!`);
+                    startQuestions();
+                })
+            })
         });
     }
 };
