@@ -12,7 +12,11 @@ function Employee(startQuestions) {
                 console.log(err.message);
                 return;
             }
-            console.table(rows);
+            if (rows.length > 0) {
+                console.table(rows);
+            } else {
+                console.log("There are no employees in the database");
+            }
             startQuestions();
         });
     }
