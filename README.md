@@ -29,7 +29,7 @@ __Visual Instruction__
 
 This video demostrates how this application works.
 
-(Future walkthrough video will go here)
+[Walkthrough Video](https://drive.google.com/file/d/1WbBjiwvQPdAKXLwkoNZp0xjxUkfuRGi5/view)
 
 ## Built With
 
